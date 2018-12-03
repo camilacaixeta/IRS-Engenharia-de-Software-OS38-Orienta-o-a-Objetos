@@ -1,0 +1,98 @@
+package exercicio3;
+
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.swing.text.NumberFormatter;
+
+import exercicio3.Produto.Categoria;
+
+public class Pedido extends Pagamento{
+
+	protected int codigo;
+	protected LocalDateTime dataPedido;
+	protected LocalDateTime dataPagamento;
+	protected List<ItemPedido> itens;
+	protected Cliente comprador;
+	
+	public Pedido(int codigo, LocalDateTime dataPedido, Cliente cliente) {
+		this.codigo = codigo;
+		this.dataPedido = dataPedido;
+		this.dataPagamento = null;
+		this.itens = new ArrayList<>();
+		this.comprador = cliente;
+	}
+	
+	public void inserirItem(ItemPedido novo){
+		this.itens.add(novo);
+	}
+	
+	public void efetuarPagamento(FormaPagamento forma){
+		this.dataPagamento = LocalDateTime.now();
+		double total = itens.stream().mapToDouble(item -> item.valor).sum();
+		super.pagar(forma, total);
+	}
+	
+	public void imprimirPedido(){
+		
+		DateTimeFormatter formatarData = DateTimeFormatter.ofPattern("dd/MM/YYYY", Locale.ENGLISH);
+		
+		String dadosPedido = new StringBuilder()
+				.append("Pedido #").append(this.codigo).append(System.getProperty("line.separator"))
+				.append("Data do Pedido: ").append(dataPedido.format(formatarData)).append(" - Data do Pagmento: ")
+				.append(dataPagamento == null ? "Pendente" : dataPagamento.format(formatarData)).append(System.getProperty("line.separator"))
+				.append("\nCliente: ").append(this.comprador.nome).append("\nEndereço: ").append(this.comprador.endereco)
+				.append(". Telefone: ").append(this.comprador.telefone).append(System.getProperty("line.separator")).toString();
+		
+		StringBuilder dadosItems = new StringBuilder();
+		DecimalFormat formatoPreco = new DecimalFormat("R$0.00");
+		
+		this.itens.stream().forEach(item -> dadosItems.append(item.nome).append(": ").append(item.quantidade)
+				.append(" = ").append(formatoPreco.format(item.valor))
+				.append(" - Categoria: ").append(item.categoria.toString()).append(System.getProperty("line.separator")));
+		
+		String dadosPagamento = new StringBuilder().append("Pagamento: ").append(formatoPreco.format(this.valor)).append(" - ")
+				.append(this.tipoPagamento == null ? "Pendente" : this.tipoPagamento.toString()).toString();
+		
+		System.out.println(dadosPedido + "\n\nItens do Pedido:\n" + dadosItems.toString() + "\n" + dadosPagamento);
+		
+	}
+	
+	public static void main(String[] args) {
+		
+		Cliente comprador = new Cliente("João", "123.456.789-10", "Rua X - num. 321. Bairro Y - Cidade Z - MN", "(01) 2345-6789");
+		
+		Pedido pedido = new Pedido(ThreadLocalRandom.current().nextInt(1000000, 10000000), LocalDateTime.of(2018, 11, 1, 0, 0), comprador);
+		
+		List<Produto> referencia = Stream.of(
+				new Produto("Detergente Epa", 100, Categoria.LIMPEZA),
+				new Produto("Biscoito de Coco Moema", 250, Categoria.ALIMENTACAO),
+				new Produto("Carregador para Celular - Bright", 250, Categoria.ELETRONICO)
+				).collect(Collectors.toList());
+		
+		pedido.inserirItem(new ItemPedido(referencia.get(0), 10, 45.0));
+		pedido.inserirItem(new ItemPedido(referencia.get(1), 5, 12.5));
+		pedido.inserirItem(new ItemPedido(referencia.get(2), 1, 25.0));
+		
+		System.out.println("~~ Dados de Pedido - Pré-Compra ~~");
+		pedido.imprimirPedido();
+		
+		pedido.efetuarPagamento(FormaPagamento.CHEQUE);
+		
+		System.out.println("\n############################################################\n~~ Dados de Pedido - Pós-Compra ~~");
+		pedido.imprimirPedido();
+		
+	}
+	
+}

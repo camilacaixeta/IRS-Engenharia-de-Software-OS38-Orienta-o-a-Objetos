@@ -1,0 +1,13 @@
+package exercicio3;
+
+public class ItemsPedido extends Produto {
+
+	protected int quantidade;
+
+	public ItemsPedido(int quantidade) {
+		this.quantidade = quantidade;
+	}
+	
+	
+	
+}

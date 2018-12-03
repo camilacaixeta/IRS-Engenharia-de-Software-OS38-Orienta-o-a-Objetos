@@ -1,0 +1,16 @@
+package exercicio3;
+
+public class ItemsPedido extends Produto {
+
+	protected int quantidade;
+
+	public ItemsPedido(String nome, int quantidadeEstoque, Categoria categoria, int quantidade) {
+		super(nome, quantidadeEstoque, categoria);
+		this.quantidade = quantidade;
+	}
+
+	
+	
+	
+	
+}

@@ -1,0 +1,23 @@
+package exercicio4;
+
+public interface Pagamento {
+	
+		protected enum FormaPagamento{
+		CHEQUE("Cheque"),
+		DINHEIRO("Dinehiro"),
+		CARTAO("Cartão");
+		
+		String forma;
+		
+		private FormaPagamento(String forma) {
+			this.forma = forma;
+		}
+		
+		public String toString(){
+			return this.forma;
+		}
+	}
+	
+	private void pagar(FormaPagamento, double);
+
+}

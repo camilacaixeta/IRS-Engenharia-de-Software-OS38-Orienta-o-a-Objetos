@@ -1,0 +1,22 @@
+package exercicio3;
+
+public class Produto {
+
+	protected String nome;
+	protected int quantidadeEstoque;
+	
+	protected enum Categoria{
+		
+		ALIMENTAÇÃO("Alimentação"),
+		LIMPEZA("Limpeza"),
+		ELETRONICO("Eletrônico");
+		
+		String valor;
+		
+		Categoria(String valor){
+			this.valor = valor;
+		}
+		
+	}
+	
+}

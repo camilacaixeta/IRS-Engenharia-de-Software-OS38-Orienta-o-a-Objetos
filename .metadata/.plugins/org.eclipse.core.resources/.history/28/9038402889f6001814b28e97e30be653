@@ -1,0 +1,31 @@
+package exercicio3;
+
+public class Pagamento {
+	
+	protected double valor;
+	protected boolean efetuado;
+	protected FormaPagamento tipoPagamento;
+	
+	public Pagamento(double valor, FormaPagamento tipoPagamento) {
+		this.valor = valor;
+		this.efetuado = false;
+		this.tipoPagamento = tipoPagamento;
+	}
+
+	protected enum FormaPagamento{
+		CHEQUE("Cheque"),
+		DINHEIRO("Dinehiro"),
+		CARTAO("Cartão");
+		
+		String forma;
+		
+		private FormaPagamento(String forma) {
+			this.forma = forma;
+		}
+	}
+	
+	protected void pagar(){
+		this.efetuado = true;
+	}
+
+}

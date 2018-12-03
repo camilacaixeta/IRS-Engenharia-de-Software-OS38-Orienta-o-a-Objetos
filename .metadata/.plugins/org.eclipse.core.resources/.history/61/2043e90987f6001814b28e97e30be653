@@ -1,0 +1,36 @@
+package exercicio3;
+
+public class Produto {
+
+	protected String nome;
+	protected int quantidadeEstoque;
+	protected Categoria categoria;
+	
+	public Produto(String nome, int quantidadeEstoque, Categoria categoria) {
+		this.nome = nome;
+		this.quantidadeEstoque = quantidadeEstoque;
+		this.categoria = categoria;
+	}
+	
+	// Este constutor é utilizado quando se cria um novo pedido
+	public Produto(Produto redundante){
+		this.nome = redundante.nome;
+		this.quantidadeEstoque = redundante.quantidadeEstoque;
+		this.categoria = redundante.categoria;
+	}
+
+	protected enum Categoria{
+		
+		ALIMENTAÇÃO("Alimentação"),
+		LIMPEZA("Limpeza"),
+		ELETRONICO("Eletrônico");
+		
+		String valor;
+		
+		Categoria(String valor){
+			this.valor = valor;
+		}
+		
+	}
+	
+}
